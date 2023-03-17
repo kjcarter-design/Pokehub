@@ -209,70 +209,76 @@ function createSlides(carousel, pokemon, data) {
   return slide;
 }
 
-
-
-fetch('/assets/current_party.json')
-	.then((response) => response.json())
-	.then(async (party) => {
-		const carousel = document.getElementById('carouselExampleControls');
-
-		// Remove the forEach loop and use a for loop instead
-		for (let index = 0; index < party.length; index++) {
-			const pokemon = party[index];
-
-			const data = await fetch(`${apiUrl}${pokemon.name}`).then((response) =>
-				response.json()
-			);
-
-			const availableMoves = data.moves
-				.filter(
-					(move) =>
-						move.version_group_details[0].level_learned_at <= pokemon.lvl
-				)
-				.map((move) => move.move.name);
-
-			const selectedMoves = [];
-			for (let i = 0; i < 4 && availableMoves.length > 0; i++) {
-				const randomMove = availableMoves.splice(
-					Math.floor(Math.random() * availableMoves.length),
-					1
-				)[0];
-				selectedMoves.push(randomMove);
-			}
-			pokemon.moves = selectedMoves;
-
-			createSlides(carousel, pokemon, data);
-		}
-
-		const tableRows = [];
-		for (let i = 0; i < party.length; i += 3) {
-			const tableRow = await createTableRows(party, i, carousel);
-			tableRows.push(tableRow);
-		}
-
-		// Append table rows in the correct order
-		tableRows.forEach((tableRow) => {
-			document.getElementById('pokemon-table').appendChild(tableRow);
-		});
-	});
-async function createTableRows(party, index, carousel) {
-	const tableRow = document.createElement('tr');
-
-	const promises = [];
-
-	for (let j = 0; j < 3 && index + j < party.length; j++) {
-		const pokemon = party[index + j];
-
-		const promise = fetch(`${apiUrl}${pokemon.name}`)
-			.then((response) => response.json())
-			.then((data) => {
-				const imageCell = createImageCell(pokemon, data, carousel, index + j);
-				tableRow.appendChild(imageCell);
-			});
-
-		promises.push(promise);
-	}
-
-	await Promise.all(promises);
-	return tableRow;
+async function displayCurrentParty() {
+  let partyPokemon = JSON.parse(localStorage.getItem("current_party"));
+  if (!partyPokemon) {
+    const partyResponse = await fetch('/assets/current_party.json');
+    partyPokemon = await partyResponse.json();
+  }
+  return partyPokemon;
 }
+
+async function createTableRows(party, index, carousel) {
+  const tableRow = document.createElement('tr');
+
+  const promises = [];
+
+  for (let j = 0; j < 3 && index + j < party.length; j++) {
+    const pokemon = party[index + j];
+
+    const promise = fetch(`${apiUrl}${pokemon.name}`)
+      .then((response) => response.json())
+      .then((data) => {
+        const imageCell = createImageCell(pokemon, data, carousel, index + j);
+        tableRow.appendChild(imageCell);
+      });
+
+    promises.push(promise);
+  }
+
+  await Promise.all(promises);
+  return tableRow;
+}
+
+(async () => {
+  const party = await displayCurrentParty();
+  const carousel = document.getElementById('carouselExampleControls');
+
+  for (let index = 0; index < party.length; index++) {
+    const pokemon = party[index];
+
+    const data = await fetch(`${apiUrl}${pokemon.name}`).then((response) =>
+      response.json()
+    );
+
+    const availableMoves = data.moves
+      .filter(
+        (move) =>
+          move.version_group_details[0].level_learned_at <= pokemon.lvl
+      )
+      .map((move) => move.move.name);
+
+    const selectedMoves = [];
+    for (let i = 0; i < 4 && availableMoves.length > 0; i++) {
+      const randomMove = availableMoves.splice(
+        Math.floor(Math.random() * availableMoves.length),
+        1
+      )[0];
+      selectedMoves.push(randomMove);
+    }
+    pokemon.moves = selectedMoves;
+
+    createSlides(carousel, pokemon, data);
+  }
+
+  const tableRows = [];
+  for (let i = 0; i < party.length; i += 3) {
+    const tableRow = await createTableRows(party, i, carousel);
+    tableRows.push(tableRow);
+  }
+
+  // Append table rows in the correct order
+  tableRows.forEach((tableRow) => {
+    document.getElementById('pokemon-table').appendChild(tableRow);
+  });
+})();

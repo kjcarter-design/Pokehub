@@ -53,7 +53,7 @@
 			</nav>
 			</div>
 		</header>
-		<main class="container" style='height:85vh; width: 100%;'>
+		<main class="container" style='height:70vh; width: 100vw;'>
 			<div class="row justify-content-center">
 				<div class="col-md-6">
 					<div class="card">
@@ -65,6 +65,10 @@
 									<input type="name" class="form-control" id="name" required />
 								</div>
 								<div class="mb-3">
+									<label for="trainerId" class="form-label">trainerID</label>
+									<input type="number" class="form-control" id="trainerID" min="8" required />
+								</div>
+								<div class="mb-3">
 									<label for="email" class="form-label">Email address</label>
 									<input type="email" class="form-control" id="email" required />
 								</div>
@@ -74,7 +78,7 @@
 								</div>
 								<div class="d-grid">
 									<button type="submit" class="btn btn-primary"><a href='../index.html' style='text-decoration: none; color: white;'>
-										Login
+										Register
 									</a>
 								</button>
 								</div>
@@ -84,8 +88,25 @@
 				</div>
 			</div>
 		</main>
-		<footer class='col-12 bg-dark' style='width: 100vw;'>
-			<h1>Footer</h1>
+		<footer class="col-12 bg-dark text-white p-1 mt-5" style="width: 100vw">
+			<div class="container">
+					<div class="col ">
+							<div class="col-md-6 d-flex flex-column justify-content-around">
+									<h5 class="mb-0">Pokénet</h5>
+									<p>Connecting trainers from across the globe.</p>
+							</div>
+							<nav class="col-md-6 d-flex flex-row">
+								<ul style='list-style: none; margin: 0; padding: 0;'>
+									<li class="nav-item">
+										<a class="nav-link" href="/pages/about.html">About Us</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href='/pages/contact.html'>Contact Us</a>
+									</li>
+								</ul>
+							</nav>
+					</div>
+			</div>
 		</footer>
 	</body>
 </html>

@@ -61,18 +61,19 @@
 						<div class="card-body">
 							<form>
 								<div class="mb-3">
-									<label for="email" class="form-label">Email address</label>
-									<input type="email" class="form-control" id="email" required />
-								</div>
-								<div class="mb-3">
-									<label for="password" class="form-label">Password</label>
-									<input type="password" class="form-control" id="password" required />
-								</div>
-								<div class="d-grid">
-									<button type="submit" class="btn btn-primary"><a href='/pages/dashboard.html' style='text-decoration: none; color: white;'>
-										Login
-									</a>
-								</button>
+									<div class="mb-3">
+										<label for="email" class="form-label">Email address</label>
+										<input type="email" class="form-control" id="email" required />
+									</div>
+									<div class="mb-3">
+										<label for="password" class="form-label">Password</label>
+										<input type="password" class="form-control" id="password" required />
+									</div>
+									<div class="d-grid">
+										<button type="submit" class="btn btn-primary"><a href='./pages/dashboard.html' style='text-decoration: none; color: white;'>
+											Login
+										</a>
+									</button>
 								</div>
 							</form>
 						</div>
@@ -80,18 +81,23 @@
 				</div>
 			</div>
 		</main>
-		<footer class="col-12 bg-dark text-white py-3 mt-5" style="width: 100vw">
+		<footer class="col-12 bg-dark text-white p-1 mt-5" style="width: 100vw">
 			<div class="container">
-					<div class="row">
-							<div class="col-md-6">
-									<h5 class="mb-3">Pokénet</h5>
+					<div class="col ">
+							<div class="col-md-6 d-flex flex-column justify-content-around">
+									<h5 class="mb-0">Pokénet</h5>
 									<p>Connecting trainers from across the globe.</p>
 							</div>
-							<div class="col-md-6">
-									<a href='/pages/contact.html'><h5 class="mb-3">Contact Us</h5></a>
-									<p>Email: support@pokenet.com</p>
-									<p>Phone: +1 (123) 456-7890</p>
-							</div>
+							<nav class="col-md-6 d-flex flex-row">
+								<ul style='list-style: none; margin: 0; padding: 0;'>
+									<li class="nav-item">
+										<a class="nav-link" href="/pages/about.html">About Us</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href='/pages/contact.html'>Contact Us</a>
+									</li>
+								</ul>
+							</nav>
 					</div>
 			</div>
 		</footer>

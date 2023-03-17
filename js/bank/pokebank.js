@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	);
 
 	let boxArray = [];
-  let currentPage = 1;
-  const boxPerPage = 25;
+	let currentPage = 1;
+	const boxPerPage = 25;
 
 	async function getPokemonData(pokemonName) {
 		const response = await fetch(
@@ -57,63 +57,141 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		cell.appendChild(sprite);
 		return cell;
-  }
-  
-  async function setCurrentPage(pageNumber) {
-    currentPage = pageNumber;
-    const pokemonsInBox = getPokemonInBox(
-      boxArray,
-      boxPerPage,
-      currentPage
-    );
-    await renderBox(pokemonsInBox);
-  };
+	}
 
-  function removePagination() {
-    const pagination = document.getElementById('box-pagination');
-    pagination.innerHTML = '';
-  }
+	async function setCurrentPage(pageNumber) {
+		currentPage = pageNumber;
+		const pokemonsInBox = getPokemonInBox(boxArray, boxPerPage, currentPage);
+		await renderBox(pokemonsInBox);
+	}
+
+	function removePagination() {
+		const pagination = document.getElementById('box-pagination');
+		pagination.innerHTML = '';
+	}
 
 	function showPokemonModal(pokemon, pokemonData) {
-		const pokemonModalElement = document.getElementById('pokemon-modal');
-		const localPokemonModal = new bootstrap.Modal(pokemonModalElement);
-		const modalLabel = document.getElementById('modal-label');
+    const pokemonModalElement = document.getElementById('pokemon-modal');
+    const pokemonModal = new bootstrap.Modal(pokemonModalElement);
+    const modalLabel = document.getElementById('modal-label');
 
-		const type = pokemonData.types.map((t) => t.type.name).join(', ');
-		modalLabel.textContent = `${pokemon.name} (Lvl ${pokemon.lvl}, Type: ${type})`;
+    const type = pokemonData.types.map((t) => t.type.name).join(', ');
+    modalLabel.textContent = `${pokemon.name} (Lvl ${pokemon.lvl}, Type: ${type})`;
 
-		const modalPokemonInfo = document.getElementById('modal-pokemon-info');
-		const releaseBtn = document.getElementById('release');
+    const modalPokemonInfo = document.getElementById('modal-pokemon-info');
+    const releaseBtn = document.getElementById('release');
 
-		modalLabel.textContent = `${pokemon.name} (Lvl ${pokemon.lvl}, Type: ${pokemon.type})`;
-		modalPokemonInfo.innerHTML = `
+    modalLabel.textContent = `${pokemon.name} (Lvl ${pokemon.lvl}, Type: ${pokemon.type})`;
+    modalPokemonInfo.innerHTML = `
     <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" width="100" height="100">
   `;
 
-  releaseBtn.onclick = async () => {
-    if (
-      confirm(
-        `Are you sure you want to release ${pokemon.name} back to the wild?`
-      )
-    ) {
-      boxArray = boxArray.filter((p) => p.name !== pokemon.name);
-  
-      const pokemonsInBox = getPokemonInBox(
-        boxArray,
-        boxPerPage,
-        currentPage
-      );
-      await renderBox(pokemonsInBox);
-  
-      removePagination();
-      createPagination(boxArray.length, 25, setCurrentPage);
-      await setCurrentPage(currentPage);
-  
-      localPokemonModal.hide(); // Use the global pokemonModal variable
-    }
-  };
-  
-		localPokemonModal.show(); // Use the global pokemonModal variable
+    releaseBtn.onclick = async () => {
+        const index = boxArray.findIndex((p) => p.name === pokemon.name);
+
+        await releasePokemon(pokemon, index);
+
+        boxArray = JSON.parse(localStorage.getItem('box_pokemon'));
+
+        const pokemonsInBox = getPokemonInBox(boxArray, boxPerPage, currentPage);
+        await renderBox(pokemonsInBox);
+
+        removePagination();
+        createPagination(boxArray.length, 25, setCurrentPage);
+        await setCurrentPage(currentPage);
+
+        pokemonModal.hide(); // Use the global pokemonModal variable
+    };
+
+    pokemonModal.show(); // Use the global pokemonModal variable
+}
+
+
+	async function releasePokemon(pokemon, index) {
+		const releaseConfirm = window.confirm(
+			`Are you sure you want to release ${pokemon.name}?`
+		);
+
+		if (releaseConfirm) {
+			let userPokemonData = JSON.parse(localStorage.getItem('box_pokemon'));
+			if (!userPokemonData) {
+				const boxResponse = await fetch('/assets/box_pokemon.json');
+				userPokemonData = await boxResponse.json();
+			}
+
+			// Remove the Pokémon from the user's data
+			userPokemonData.splice(index, 1);
+
+			// Update the user's Pokémon in localStorage
+			localStorage.setItem('box_pokemon', JSON.stringify(userPokemonData));
+
+			// Update the user Pokémon display
+			const userPokemonModalBody = document.getElementById(
+				'user-pokemon-modal-body'
+			);
+			userPokemonModalBody.innerHTML = '';
+			const container = await generateUserPokemonHTML(userPokemonData);
+			userPokemonModalBody.appendChild(container);
+		}
+	}
+
+	async function generateUserPokemonHTML() {
+		let boxPokemon = JSON.parse(localStorage.getItem("box_pokemon"));
+		if (!boxPokemon) {
+			const boxResponse = await fetch('/assets/box_pokemon.json');
+			boxPokemon = await boxResponse.json();
+		}
+	
+		let partyPokemon = JSON.parse(localStorage.getItem("current_party"));
+		if (!partyPokemon) {
+			const partyResponse = await fetch('/assets/current_party.json');
+			partyPokemon = await partyResponse.json();
+		}
+	
+		const allUserPokemon = [...boxPokemon, ...partyPokemon];
+
+		const container = document.createElement('div'); // create container element
+		container.classList.add('row', 'gx-3', 'gy-3', 'px-2');
+
+		allUserPokemon.forEach((pokemon, index) => {
+			const card = document.createElement('div'); // create card element
+			card.classList.add('card', 'col-md-6');
+			card.style.maxWidth = '250px';
+			card.style.margin = 'auto';
+
+			const img = document.createElement('img'); // create image element
+			const spriteUrl = pokemon.sprites?.front_default ?? '/assets/unknown.png';
+			img.src = spriteUrl;
+			img.alt = pokemon.name;
+			img.classList.add('card-img-top');
+			card.appendChild(img);
+
+			const cardBody = document.createElement('div'); // create card body element
+			cardBody.classList.add('card-body');
+
+			const name = document.createElement('h5'); // create name element
+			name.classList.add('card-title', 'fs-5');
+			name.textContent = pokemon.name;
+			cardBody.appendChild(name);
+
+			const level = document.createElement('p'); // create level element
+			level.classList.add('card-text', 'fs-6');
+			level.textContent = `Level ${pokemon.lvl}`;
+			cardBody.appendChild(level);
+
+			const type = document.createElement('p'); // create type element
+			type.classList.add('card-text', 'fs-6');
+			type.textContent = pokemon.type;
+			cardBody.appendChild(type);
+
+			card.appendChild(cardBody);
+			container.appendChild(card); // append card to container
+
+			card.addEventListener('click', () => confirmTrade(pokemon, index));
+			container.appendChild(card);
+		});
+
+		return container; // return container element
 	}
 
 	function getPokemonInBox(boxArray, boxPerPage, currentPage) {
@@ -152,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			.then((response) => response.json())
 			.then((data) => {
 				boxArray = data; // Update the boxArray with the fetched data
-				
+
 				let currentPage = 1;
 
 				createPagination(boxArray.length, boxPerPage, setCurrentPage);

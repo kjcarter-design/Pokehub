@@ -43,8 +43,7 @@
 						<ul class="nav nav-tabs">
 							<li class="nav-item">
 								<a
-									class="nav-link active"
-									aria-current="page"
+									class="nav-link"
 									href="/pages/dashboard.html"
 									>Home</a
 								>
@@ -53,7 +52,7 @@
 								<a class="nav-link" href="/pages/pokebank.html">PokéBank</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="/pages/trade.html">Trade</a>
+								<a class="nav-link active" aria-current="page" href="/pages/trade.html">Trade</a>
 							</li>
 						</ul>
 					</nav>
@@ -74,11 +73,8 @@
 					/>
 				</div>
 				<div class="col">
-					<select id="filter-select" class="form-select">
-						<option value="">Filter by type</option>
-						<option value="fire">Fire</option>
-						<option value="water">Water</option>
-						<option value="grass">Grass</option>
+					<select id="type-filter" class="form-select">
+						<option value="all" selected>All Types</option>
 					</select>
 				</div>
 				<table class="table" id="trade-market-table">
@@ -146,13 +142,32 @@
           <div class="modal-body d-flex flex-column align-items-center justify-content-center" id="user-pokemon-modal-body">
             <!-- Display user's pokemon here -->
           </div>
+					<p id="trade-confirmation" class="text-center mt-3" style="display: none;"></p>
+					<button id="confirm-trade" class="btn btn-success" onclick="performTrade()" style="display: none;">Yes</button>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
     </div>
-    
+
+		<!-- trade-confirmation-modal -->
+    <div class="modal fade" id="trade-complete-modal" tabindex="-1" aria-labelledby="trade-complete-modal-label" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="trade-complete-modal-label">Trade Complete</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="trade-complete-modal-body">
+						<!-- Content will be dynamically generated -->
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<!-- Footer -->
 		<footer class="bg-dark text-white p-1 mt-5" style="width: 100vw">
