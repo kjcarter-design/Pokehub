@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0,user-scalable=no"
+		/>
+		<title>Pokénet</title>
+		<link rel="icon" type="image/x-icon" href="/assets/Pokeball.ico" />
+		<link rel="stylesheet" href="../css/index.css" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+			crossorigin="anonymous"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+	</head>
+	<body class="bg-body-tertiary page row" style='width: 100vw; height: 100vh; margin: 0;'>
+     <!-- Header -->
+		<header class="py-3 mb-3 border-bottom shadow">
+			<div
+				class="container-fluid d-grid gap-1 align-items-center"
+				style="grid-template-columns: .5fr 5fr"
+			>
+				<a href="/index.html" style="align-self: center; margin: 0">
+					<img
+						alt="Logo"
+						src="/assets/Pokénet.png"
+						class="col-lg-4 mb-2 mb-lg-0"
+						style="width: 10vw; margin: 0"
+					/>
+				</a>
+				<div class="d-flex align-items-center">
+					<nav class="container-fluid d-grid gap-3 align-items-center">
+						<ul class="nav nav-tabs">
+							<li class="nav-item">
+								<a class="nav-link active" aria-current="page" href="/pages/dashboard.html">Home</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/pages/pokebank.html">PokèBank</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#">Trade</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</header>
+
+    <!-- Greeting -->
+		<section>
+			<section class="row d-flex justify-content-between align-items-center">
+				<h2 class="col">Hello, Kevin</h2>
+				<div
+					class="col card d-flex justify-content-center align-items-center"
+					style="
+						width: 40vw;
+						margin-right: 1em;
+						margin-left: 1em;
+						padding: 0.05rem;
+					"
+				>
+					<time class="col" datetime="{formattedTime}" id="time">
+						{formattedTime}</time
+					>
+				</div>
+			</section>
+    </section>
+			<br />
+
+<!-- Current Party Carousel -->
+			<section
+				class="card shadow container-fluid d-grid gap-0 align-items-center m-4"
+				style="max-height: 50vh; max-width: 90vw;"
+			>
+				<div
+					id="carouselExampleControls"
+					class="carousel slide p-0"
+					data-bs-interval="false"
+					data-bs-wrap="false"
+					style="max-height: 50vh,"
+				>
+					<div class="carousel-inner">
+						<div class="carousel-item active p-0" id="party-slide">
+							<div class="table-responsive p-0" style="max-height: 45vh">
+								<table class="table clickable">
+									<thead>
+										<tr>
+											<th colspan="6">Current Party</th>
+										</tr>
+									</thead>
+									<tbody id="pokemon-table"></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+    <!-- Map -->
+    <section>
+      <div class="card-body container-fluid d-grid gap-0 align-items-center ">
+      <div class="card w-60 p-2">
+        <div class="ratio ratio-1x1">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3275.367761429612!2d-82.39282996810459!3d34.82184492155882!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88582f57b4bbbb25%3A0x45dffc2fd3f2244!2sThe%20PokeMart!5e0!3m2!1sen!2sus!4v1678945198321!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+		<footer class="col-12 bg-dark text-white p-1 mt-5" style="width: 100vw">
+			<div class="container">
+					<div class="col ">
+							<div class="col-md-6 d-flex flex-column justify-content-around">
+									<h5 class="mb-0">Pokénet</h5>
+									<p>Connecting trainers from across the globe.</p>
+							</div>
+							<nav class="col-md-6 d-flex flex-row">
+								<ul style='list-style: none; margin: 0; padding: 0;'>
+									<li class="nav-item">
+										<a class="nav-link" href="/pages/about.html">About Us</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href='/pages/contact.html'>Contact Us</a>
+									</li>
+								</ul>
+							</nav>
+					</div>
+			</div>
+		</footer>
+		</body>
+	<script>
+		function updateTime() {
+			var now = new Date();
+			var formattedTime = now.toLocaleString('en-US', {
+				timeZone: 'EST',
+				year: 'numeric',
+				month: '2-digit',
+				day: '2-digit',
+				hour12: false,
+				hour: '2-digit',
+				minute: '2-digit',
+			});
+			document.getElementById('time').textContent = formattedTime;
+		}
+
+		// Update the time every second
+		setInterval(updateTime, 1000);
+	</script>
+	<script src="/js/dashboard/pokemonTable.js"></script>
+</html>

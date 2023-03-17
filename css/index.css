@@ -1,0 +1,109 @@
+.page{
+  display: grid;
+  grid-template-areas:
+   "head"
+   "main"
+   "footer";
+   height: 100vh;
+   width: 100vw;
+   grid-template-rows: .5fr 8fr .3fr;
+}
+
+.page > header{
+  grid-area: head;
+
+}
+.page > section {
+  grid-area: main;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.card {
+  grid-area: main;
+  padding: .5rem;
+  height: 40vh;
+  width: 90vw;
+}
+.page > footer {
+  grid-area: footer;
+
+}
+
+.carousel-item {
+  display: flex;
+  justify-content: center;
+}
+table {
+  margin: auto;
+  width: 80%;
+  font-size: 14px;
+  text-align: center;
+}
+table th, table td {
+  padding: 5px;
+  border: 1px solid #ddd;
+}
+table th {
+  background-color: #f2f2f2;
+}
+table td img {
+  width: 50px;
+  height: 50px;
+}
+.progress {
+  margin: auto;
+}
+@media (min-width: 576px) {  }
+
+/*  Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {  }
+
+ /*  Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) {  }
+
+ /*  X-Large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) { }
+
+/*   XX-Large devices (larger desktops, 1400px and up)*/
+@media (min-width: 1400px) { 
+  
+  .nav{
+  width: 20em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  justify-self: center;
+  align-items: center;
+}
+.nav-pills {
+	display: flex;
+	flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: whitesmoke;
+  padding: 0%;
+  margin: 1rem;
+}
+
+.login{
+  width: 10em;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.btn{
+  margin: 0,1rem;
+}
+
+#logo {
+  width: 8em;
+  margin: 1rem;
+}
+
+.icons {
+  width: 5em;
+  padding:0%;
+  justify-self: center;
+} 
+} 
